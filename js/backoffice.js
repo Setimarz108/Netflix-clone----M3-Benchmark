@@ -35,14 +35,14 @@ const postMovie = async () => {
 
 }
 
-postMovie()
 
-//  edit Movie
 
-const editMovie = async () => {
+//  retrieve Movie Info
 
-     let url = window.location.href
-     let movieID= new URLSearchParams(url.split("?")[1].get('id'));
+const getMovieInfo = async () => {
+
+    
+     let movieId= new URLSearchParams(location.search).get('_id');
      let movieName = document.getElementById('name')
      let movieDescription = document.getElementById('description')
      let movieCategory = document.getElementById('category')
@@ -50,10 +50,57 @@ const editMovie = async () => {
 
 
      
-     let response = await fetch(`https://striveschool-api.herokuapp.com/api/movies/${movieID}`, {
+     let response = await fetch(`https://striveschool-api.herokuapp.com/api/movies/Action${movieId}`, {
         method: 'GET',
         headers: {
             Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIwYjZlNjRjZmY1ZjAwMTU5MGJkYzciLCJpYXQiOjE2MzkxMzE4MTMsImV4cCI6MTY0MDM0MTQxM30.ofSSpWSsxVlPnYi8DKMpDrWKIy4H10plB5VvVJOkx90" 
         }
     })   
+
+    let movie = await response.json()
+
+    movieName.value = movie.name
+    movieDescription.value = movie.description
+    movieCategory.value = movie.category
+    movieImage.value = movie.imageUrl 
+}
+
+
+
+const editMovie = async () => {
+
+       let editBtn = document.getElementById('editBtn')
+      
+       let movieId = new URLSearchParams(location.search).get('_id')
+
+       editBtn.addEventListener('click', async () => {
+
+            let response = await fetch(`https://striveschool-api.herokuapp.com/api/movies/${movieId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIwYjZlNjRjZmY1ZjAwMTU5MGJkYzciLCJpYXQiOjE2MzkxMzE4MTMsImV4cCI6MTY0MDM0MTQxM30.ofSSpWSsxVlPnYi8DKMpDrWKIy4H10plB5VvVJOkx90" 
+                },
+
+                
+
+                response : JSON.stringify({
+
+                    name: document.getElementById('name').value,
+                    description: document.getElementById('decription').value,
+                    category: document.getElementById('category').value,
+                    imageUrl: document.getElementById('imageUrl').value,
+
+
+                })
+            })
+
+       })
+    
+}
+
+window.onload = async () => {
+    await postMovie()
+    await getMovieInfo()
+    await editMovie()
 }
