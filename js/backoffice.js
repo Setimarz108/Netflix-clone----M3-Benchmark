@@ -84,17 +84,19 @@ const editMovie = async () => {
 
                 
 
-                response : JSON.stringify({
+                body : JSON.stringify({
 
                     name: document.getElementById('name').value,
-                    description: document.getElementById('decription').value,
+                    description: document.getElementById('description').value,
                     category: document.getElementById('category').value,
                     imageUrl: document.getElementById('imageUrl').value,
 
 
                 })
             })
-
+           
+            let data = await response.json()
+            console.log(data)
        })
     
 }
